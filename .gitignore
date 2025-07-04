@@ -1,0 +1,21 @@
+# Ambiente virtual
+venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos de configuração do Flask
+instance/
+.env
+
+# Arquivos de log e sistema
+*.log
+.DS_Store
+Thumbs.db
+
+# Pastas de IDEs/editors
+.vscode/
+.idea/
