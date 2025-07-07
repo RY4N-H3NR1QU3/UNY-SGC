@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Geral de Cursos - Unyleya Premium</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="container">
+                <div class="header-main">
+                    <div class="logo">
+                        Unyleya
+                    </div>
+                    <div class="title-section">
+                        Base Geral de Cursos
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Digite sua pesquisa..." id="searchInput">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="setSearchType('curso')">Curso</button>
+                    <button class="filter-tab" onclick="setSearchType('area')">Área</button>
+                    <button class="filter-tab" onclick="setSearchType('metodologia')">Metodologia</button>
+                    <button class="filter-tab" onclick="setSearchType('faixa')">Faixa</button>
+                </div>
+            </div>
+
+            <div class="advanced-filters">
+                <div class="filter-group">
+                    <label>Área de Conhecimento</label>
+                    <select class="filter-select" id="areaFilter" multiple>
+                        <option value="">Todas as áreas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Metodologia</label>
+                    <select class="filter-select" id="metodologiaFilter" multiple>
+                        <option value="">Todas as metodologias</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Faixa</label>
+                    <select class="filter-select" id="faixaFilter" multiple>
+                        <option value="">Todas as faixas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions-bar">
+                <div>
+                    <button class="btn btn-primary" onclick="openAddModal()">+ Adicionar Curso</button>
+                    <button class="btn btn-secondary" onclick="openUploadModal()">📁 Upload Planilha</button>
+                </div>
+                <div>
+                    <button class="btn btn-success" onclick="exportToPDF('design1')" id="exportBtn1">📄 PDF Corporativo</button>
+                    <button class="btn btn-success" onclick="exportToPDF('design2')" id="exportBtn2">📄 PDF Moderno</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="table-header">
+            <div class="table-title">Lista de Cursos Disponíveis</div>
+            <div class="table-actions">
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="toggleView('table')" id="tableViewBtn">📋 Tabela</button>
+                    <button class="view-btn" onclick="toggleView('cards')" id="cardsViewBtn">🗂️ Cards</button>
+                </div>
+                <button class="btn btn-primary" onclick="selectAll()">Selecionar Todos</button>
+                <button class="btn btn-secondary" onclick="clearSelection()">Limpar Seleção</button>
+            </div>
+        </div>
+        
+        <div id="tableView">
+            <table id="cursosTable">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
+                        </th>
+                        <th>Nome do Curso</th>
+                        <th>Área de Conhecimento</th>
+                        <th>Metodologia</th>
+                        <th>Faixa</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="cursosBody">
+                    <!-- Cursos serão carregados aqui via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="cardsView" class="cards-view" style="display: none;">
+            <!-- Cards serão carregados aqui via JavaScript -->
+        </div>
+
+        <div class="stats-bar">
+            <span>Total de cursos: <strong id="totalCursos">0</strong></span>
+            <span>Cursos exibidos: <strong id="cursosExibidos">0</strong></span>
+            <span>Cursos selecionados: <strong id="cursosSelecionados">0</strong></span>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Curso -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Adicionar Novo Curso</h2>
+                <span class="close" onclick="closeModal('addModal')">&times;</span>
+            </div>
+            <form id="addCursoForm">
+                <div class="form-group">
+                    <label for="cursoNome">Nome do Curso *</label>
+                    <input type="text" class="form-control" id="cursoNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="cursoArea">Área de Conhecimento</label>
+                    <select class="form-control" id="cursoArea">
+                        <option value="">Selecione uma área</option>
+                        <option value="Direito">Direito</option>
+                        <option value="Administração Pública">Administração Pública</option>
+                        <option value="Educação">Educação</option>
+                        <option value="MBA">MBA</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cursoMetodologia">Metodologia *</label>
+                    <select class="form-control" id="cursoMetodologia" required>
+                        <option value="">Selecione uma metodologia</option>
+                        <option value="CV100">CV100</option>
+                        <option value="SV100">SV100</option>
+                        <option value="SV40">SV40</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cursoFaixa">Faixa *</label>
+                    <select class="form-control" id="cursoFaixa" required>
+                        <option value="">Selecione uma faixa</option>
+                        <option value="FAIXA 1">FAIXA 1</option>
+                        <option value="FAIXA 2">FAIXA 2</option>
+                        <option value="FAIXA 3">FAIXA 3</option>
+                        <option value="FAIXA 4">FAIXA 4</option>
+                        <option value="FAIXA 12">FAIXA 12</option>
+                        <option value="FAIXA 13">FAIXA 13</option>
+                        <option value="FAIXA 15">FAIXA 15</option>
+                        <option value="FAIXA 16">FAIXA 16</option>
+                        <option value="FAIXA 17">FAIXA 17</option>
+                        <option value="FAIXA 18">FAIXA 18</option>
+                        <option value="FAIXA 19">FAIXA 19</option>
+                    </select>
+                </div>
+                <div style="text-align: right; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Adicionar Curso</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Upload Planilha -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Upload de Planilha</h2>
+                <span class="close" onclick="closeModal('uploadModal')">&times;</span>
+            </div>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>Arquivo Excel (.xlsx ou .xls)</label>
+                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                        <div class="file-upload-icon">📁</div>
+                        <p><strong>Clique para selecionar arquivo ou arraste aqui</strong></p>
+                        <p style="font-size: 14px; color: #666; margin-top: 20px;">
+                            Formato esperado: Nome | Área | Metodologia | Faixa
+                        </p>
+                    </div>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;" onchange="handleFileSelect(this)">
+                </div>
+                <div id="fileInfo" style="display: none; margin-top: 25px; padding: 20px; background: #ecfdf5; border-radius: 16px; border: 3px solid #10b981;">
+                    <strong>Arquivo selecionado:</strong> <span id="fileName"></span>
+                </div>
+                <div style="text-align: right; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('uploadModal')">Cancelar</button>
+                    <!-- Botão de upload -->
+                    <input type="file" id="arquivoPlanilha" accept=".xlsx,.xls" style="display: none;">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('arquivoPlanilha').click()">
+                        📁 Upload Planilha
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- PAGINAÇÃO -->
+<div class="pagination-bar">
+    <button class="btn btn-secondary" onclick="alterarPagina('anterior')">⬅ Anterior</button>
+    <span class="pagina-atual">Página <span id="paginaAtual">1</span> de <span id="totalPaginas">1</span></span>
+    <button class="btn btn-secondary" onclick="alterarPagina('proxima')">Próxima ➡</button>
+</div>
+
+
+<script src="../static/js/main.js"></script>
+
+
+
+</body>
+</html>
+
